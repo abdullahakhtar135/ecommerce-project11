@@ -1,0 +1,37 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, sans-serif; color: #222; line-height: 1.5; background: #f7f8fa; }
+
+.site-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; background: #1f3864; color: #fff; }
+.logo { font-size: 1.6rem; }
+.main-nav a { color: #fff; margin-left: 1.5rem; text-decoration: none; padding-bottom: 4px; }
+.main-nav a:hover, .main-nav a.active { border-bottom: 2px solid #f2b134; }
+
+.hero { padding: 4rem 2rem; text-align: center; background: linear-gradient(135deg, #2e5597, #1f3864); color: #fff; }
+.hero h2 { font-size: 2.2rem; margin-bottom: .5rem; }
+.hero p { margin-bottom: 1.5rem; }
+.btn { display: inline-block; background: #f2b134; color: #1f3864; padding: .7rem 1.4rem; border-radius: 6px; text-decoration: none; font-weight: bold; }
+
+.page-title { padding: 2rem 2rem 0; }
+.section-title { padding: 2rem 2rem 0; }
+
+.product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.5rem; padding: 2rem; }
+.product { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 1rem; text-align: center; }
+.product img { max-width: 100%; height: 140px; object-fit: cover; border-radius: 6px; }
+.product h3 { margin: .8rem 0 .3rem; }
+.product p { margin-bottom: .8rem; color: #1f3864; font-weight: bold; }
+.product button { background: #1f3864; color: #fff; border: 0; padding: .6rem 1rem; border-radius: 6px; cursor: pointer; }
+.product button:hover { background: #2e5597; }
+.product button.added { background: #2e8b57; }
+
+.content { max-width: 800px; padding: 2rem; }
+.content h2 { margin: 1.5rem 0 .5rem; }
+.content ul { margin-left: 1.2rem; }
+
+.site-footer { text-align: center; padding: 1.5rem; background: #1f3864; color: #fff; margin-top: 2rem; }
+
+@media (max-width: 600px) {
+  .site-header { flex-direction: column; align-items: flex-start; }
+  .main-nav { margin-top: .5rem; }
+  .main-nav a { margin-left: 0; margin-right: 1rem; }
+  .hero h2 { font-size: 1.6rem; }
+}
