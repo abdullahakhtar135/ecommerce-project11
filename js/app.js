@@ -1,4 +1,7 @@
-const products = [
+const SUPABASE_URL = "https://ktzxeqvrliqauctlbajt.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt0enhlcXZybGlxYXVjdGxiYWp0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIwMDI0MDYsImV4cCI6MjEwNzU3ODQwNn0.j5m4E_V_qySuVayJCkR3j_2b8wL3cIqKMT_XNHJl8Os";
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+let products = [
   { id: 1,  name: "Dell Laptop",         category: "Computers",   price: 3499, stock: 10 },
   { id: 2,  name: "Wireless Mouse",      category: "Accessories", price: 129,  stock: 25 },
   { id: 3,  name: "Smartphone",          category: "Phones",      price: 2499, stock: 0 },
@@ -37,6 +40,7 @@ function renderProducts(list) {
         <p>AED ${prod.price.toLocaleString()}</p>
         <p class="stock ${stockClass}">${stockLabel}</p>
         <button ${prod.stock === 0 ? "disabled" : ""}>Add to Cart</button>
+                <a href="product-detail.html?id=${prod.product_id}">View details</a>
       </div>`;
   });
 }
@@ -72,4 +76,14 @@ document.getElementById("sort-select").addEventListener("change", e => {
   applyAll();
 });
 
-renderProducts(products);
+async function loadProducts() {
+ const { data, error } = await supabaseClient
+    .from("product").select("*, category(category_name)").order("name");
+  if (error) {
+    document.getElementById("product-list").innerHTML = `<p>Could not load products: ${error.message}</p>`;
+    return;
+  }
+    products = data.map(p => ({ ...p, category: p.category.category_name }));
+  renderProducts(products);
+}
+loadProducts();
