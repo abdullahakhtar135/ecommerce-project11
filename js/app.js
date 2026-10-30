@@ -117,9 +117,9 @@ function updateQuantity(productId, quantity) {
 /* ---------- AUTH ---------- */
 
 async function updateNavForAuth() {
-  const { data: { user } } = await supabaseClient.auth.getUser();
   const navSlot = document.getElementById("auth-nav-slot");
   if (!navSlot) return;
+  const { data: { user } } = await supabaseClient.auth.getUser();
   if (user) {
     navSlot.innerHTML = `<span>Hi, ${user.email}</span> <a href="#" onclick="logout()">Log out</a>`;
   } else {
@@ -139,25 +139,3 @@ async function requireLogin() {
 }
 
 updateNavForAuth();
-async function updateNavForAuth() {
-  const { data: { user } } = await supabase.auth.getUser();
-  const navSlot = document.getElementById("auth-nav-slot");
-  if (!navSlot) return;
-  if (user) {
-    navSlot.innerHTML = `<span>Hi, ${user.email}</span> <a href="#" onclick="logout()">Log out</a>`;
-  } else {
-    navSlot.innerHTML = `<a href="login.html">Login</a>`;
-  }
-}
-
-async function logout() {
-  await supabase.auth.signOut();
-  window.location.href = "index.html";
-}
-
-updateNavForAuth();
-async function requireLogin() {
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) window.location.href = "login.html";
-  return user;
-}
