@@ -1,0 +1,16 @@
+<form id="register-form">
+  <input type="email" id="email" placeholder="Email" required>
+  <input type="password" id="password" placeholder="Password (min 6 chars)" required>
+  <button type="submit">Register</button>
+</form>
+
+<script>
+  document.getElementById("register-form").addEventListener("submit", async e => {
+    e.preventDefault();
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const { error } = await supabase.auth.signUp({ email, password });
+    if (error) alert(error.message);
+    else { alert("Account created — you can now log in."); window.location.href = "login.html"; }
+  });
+</script>
