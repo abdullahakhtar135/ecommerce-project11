@@ -123,7 +123,7 @@ async function updateNavForAuth() {
   if (user) {
     navSlot.innerHTML = `<span>Hi, ${user.email}</span> <a href="#" onclick="logout()">Log out</a>`;
   } else {
-    navSlot.innerHTML = `<a href="login.html">Login</a>`;
+    navSlot.innerHTML = `<a href="login.html">Login</a> <a href="register.html">Register</a>`;
   }
 }
 
