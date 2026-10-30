@@ -45,7 +45,7 @@ function renderProducts(list) {
                 <a href="product-detail.html?id=${prod.product_id}">View details</a>
       </div>`;
   });
-}
+
 
 let currentCategory = "All";
 let currentSearch = "";
