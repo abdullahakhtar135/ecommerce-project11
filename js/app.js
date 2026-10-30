@@ -24,10 +24,12 @@ let products = [
 
 function renderProducts(list) {
   const container = document.getElementById("product-list");
-  container.innerHTML = "";
-  if (list.length === 0) {
-    container.innerHTML = "<p>No products match your search.</p>";
-    return;
+  container.innerHTML += `
+  <div class="product">
+    <h3>${prod.name}</h3>
+    <p>AED ${prod.price}</p>
+    <button onclick='addToCart(${JSON.stringify(prod)})'>Add to Cart</button>
+  </div>`;
   }
   list.forEach(prod => {
     const stockLabel = prod.stock === 0 ? "Out of Stock"
@@ -87,3 +89,34 @@ async function loadProducts() {
   renderProducts(products);
 }
 loadProducts();
+function getCart() {
+  return JSON.parse(localStorage.getItem("cart") || "[]");
+}
+
+function saveCart(cart) {
+  localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+function addToCart(product) {
+  const cart = getCart();
+  const existing = cart.find(item => item.product_id === product.product_id);
+  if (existing) {
+    existing.quantity += 1;
+  } else {
+    cart.push({ ...product, quantity: 1 });
+  }
+  saveCart(cart);
+}
+
+function removeFromCart(productId) {
+  saveCart(getCart().filter(item => item.product_id !== productId));
+}
+
+function updateQuantity(productId, quantity) {
+  quantity = Number(quantity);
+  if (quantity <= 0) return removeFromCart(productId);
+  const cart = getCart().map(item =>
+    item.product_id === productId ? { ...item, quantity } : item
+  );
+  saveCart(cart);
+}
