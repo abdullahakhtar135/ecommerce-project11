@@ -1,15 +1,13 @@
-/*lab 8 database query*/
-/*1.KPI-total_revenue------------------*/
 SELECT
     SUM(total) AS total_revenue,
     COUNT(*) AS number_of_orders,
     ROUND(AVG(total), 2) AS avg_order_value
-FROM "orderr"
+FROM "order"
 WHERE status != 'Cancelled';
 
 /*2.KPI-Number of customers------------------*/
 SELECT COUNT(DISTINCT customer_id) AS number_of_customers
-FROM "orderr"
+FROM "order"
 WHERE status != 'Cancelled';
 
 /*3.KPI-Top Selling products------------------*/
@@ -39,7 +37,7 @@ ORDER BY category_revenue DESC;
 SELECT
     DATE_TRUNC('month', order_date) AS month,
     SUM(total) AS monthly_revenue
-FROM "orderr"
+FROM "order"
 WHERE status != 'Cancelled'
 GROUP BY month
 ORDER BY month;
@@ -48,5 +46,5 @@ ORDER BY month;
 SELECT
     status,
     COUNT(*) AS orders
-FROM "orderr"
+FROM "order"
 GROUP BY status;
