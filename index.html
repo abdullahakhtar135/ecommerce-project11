@@ -9,13 +9,13 @@
 <body>
   <header class="site-header">
     <h1 class="logo">ShopNow</h1>
-  <nav>
-  <a href="index.html">Home</a>
-  <a href="products.html">Products</a>
-  <a href="cart.html">Cart</a>
-  <a href="about.html">About</a>
-  <span id="auth-nav-slot"></span>
-</nav>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="products.html">Products</a>
+      <a href="cart.html">Cart</a>
+      <a href="about.html">About</a>
+      <span id="auth-nav-slot"></span>
+    </nav>
   </header>
 
   <section class="hero">
@@ -24,30 +24,66 @@
     <a class="btn" href="products.html">Shop all products</a>
   </section>
 
-  <h2 class="section-title">Featured products</h2>
-  <section class="product-grid" id="featured-products">
-    <div class="product">
-      <img src="images/laptop.svg" alt="Business Laptop">
-      <h3>Business Laptop</h3>
-      <p>AED 3,499</p>
-      <button>Add to Cart</button>
-    </div>
-    <div class="product">
-      <img src="images/headphones.svg" alt="Noise-Cancelling Headphones">
-      <h3>Noise-Cancelling Headphones</h3>
-      <p>AED 549</p>
-      <button>Add to Cart</button>
-    </div>
-    <div class="product">
-      <img src="images/monitor.svg" alt="27-inch Monitor">
-      <h3>27-inch Monitor</h3>
-      <p>AED 899</p>
-      <button>Add to Cart</button>
-    </div>
+  <h2 class="section-title">Shop by category</h2>
+  <section class="categories">
+    <a class="cat-card" href="products.html"><span>💻</span><h3>Computers</h3></a>
+    <a class="cat-card" href="products.html"><span>🖱️</span><h3>Accessories</h3></a>
+    <a class="cat-card" href="products.html"><span>📱</span><h3>Phones</h3></a>
   </section>
 
-  <footer class="site-footer"><p>&copy; 2025 ShopNow.</p></footer>
+  <h2 class="section-title">Featured products</h2>
+  <section class="product-grid" id="featured-products">
+    <p style="padding: 0 2rem;">Loading products...</p>
+  </section>
+
+  <section class="features">
+    <div class="feature"><span>🚚</span><h3>Fast Delivery</h3><p>Across the UAE in 1–3 days</p></div>
+    <div class="feature"><span>🛡️</span><h3>1-Year Warranty</h3><p>On all electronics</p></div>
+    <div class="feature"><span>💬</span><h3>24/7 Support</h3><p>We are always here to help</p></div>
+  </section>
+
+  <footer class="site-footer"><p>&copy; 2026 ShopNow. All rights reserved.</p></footer>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/app.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    async function loadFeatured() {
+      const grid = document.getElementById("featured-products");
+      const { data, error } = await supabaseClient
+        .from("product")
+        .select("*")
+        .gt("stock", 0)
+        .order("product_id")
+        .limit(3);
+
+      if (error) {
+        grid.innerHTML = "<p style='padding: 0 2rem;'>Could not load products: " + error.message + "</p>";
+        return;
+      }
+
+      grid.innerHTML = "";
+      data.forEach(prod => {
+        const card = document.createElement("div");
+        card.className = "product";
+
+        const ext = prod.name === "Smartphone" ? "avif" : "jpg";
+        card.innerHTML = `
+          <img src="images/${prod.name}.${ext}" alt="${prod.name}"
+               onerror="this.onerror=null; this.src='images/placeholder.jpg'">
+          <h3>${prod.name}</h3>
+          <p>AED ${Number(prod.price).toLocaleString()}</p>
+          <a href="product-detail.html?id=${prod.product_id}">View details</a><br><br>
+        `;
+
+        const btn = document.createElement("button");
+        btn.textContent = "Add to Cart";
+        btn.addEventListener("click", () => addToCart(prod));
+        card.appendChild(btn);
+
+        grid.appendChild(card);
+      });
+    }
+    loadFeatured();
+  </script>
 </body>
 </html>
