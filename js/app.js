@@ -51,8 +51,56 @@ async function loadProducts() {
   renderProducts(products);
 }
 
+/* ---------- LAB 9: SMART SEARCH ---------- */
+
+function scoreProduct(product, queryWords) {
+  const text = `${product.name} ${product.description || ""} ${product.category || ""}`.toLowerCase();
+  let score = 0;
+  queryWords.forEach(word => {
+    if (text.includes(word)) score += 1;
+  });
+  return score;
+}
+
+function extractMaxPrice(query) {
+  const match = query.match(/under\s+(\d+)|below\s+(\d+)/i);
+  if (!match) return null;
+  return Number(match[1] || match[2]);
+}
+
+function smartSearch(query, allProducts) {
+  const maxPrice = extractMaxPrice(query);
+  const candidates = maxPrice ? allProducts.filter(p => p.price <= maxPrice) : allProducts;
+
+  // remove the "under 200" part so it is not scored as keywords
+  const cleaned = query.replace(/(under|below)\s+\d+/gi, "");
+  const queryWords = cleaned.toLowerCase().split(/\s+/).filter(w => w.length > 2);
+
+  return candidates
+    .map(p => ({ product: p, score: scoreProduct(p, queryWords) }))
+    .filter(r => r.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 5)
+    .map(r => r.product);
+}
+
 // Only run product code on pages that have the product list
 if (document.getElementById("product-list")) {
+
+  const smartBox = document.getElementById("smart-search");
+  if (smartBox) {
+    smartBox.addEventListener("input", e => {
+      const query = e.target.value;
+      const resultsDiv = document.getElementById("smart-results");
+      if (query.length < 3) { resultsDiv.innerHTML = ""; return; }
+
+      const matches = smartSearch(query, products);
+      resultsDiv.innerHTML = matches.length
+        ? matches.map(p => `<p><a href="product-detail.html?id=${p.product_id}">${p.name}</a> — AED ${p.price}</p>`).join("")
+        : "<p>No matches. Try different words.</p>";
+    });
+  }
+
   const searchBox = document.getElementById("search-box");
   if (searchBox) {
     searchBox.addEventListener("input", e => {
