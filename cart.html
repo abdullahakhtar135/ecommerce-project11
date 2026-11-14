@@ -51,10 +51,13 @@
       document.getElementById("subtotal").textContent = subtotal.toFixed(2);
     }
 
-    async function checkout() {
-      const user = await requireLogin();
-      if (user) alert("Logged in as " + user.email + ". Checkout will be built in Lab 6.");
-    }
+   function checkout() {
+  if (getCart().length === 0) {
+    alert("Your cart is empty.");
+    return;
+  }
+  window.location.href = "checkout.html";
+}
 
     renderCart();
   </script>
